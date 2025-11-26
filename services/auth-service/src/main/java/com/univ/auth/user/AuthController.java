@@ -66,4 +66,29 @@ public class AuthController {
         response.put("type", "Bearer");
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/me")
+public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        return ResponseEntity.status(401).body("Missing or invalid token");
+    }
+
+    String token = authHeader.substring(7);
+    String username = jwtService.extractUsername(token);
+
+    User user = userRepository.findByUsername(username).orElse(null);
+
+    if (user == null) {
+        return ResponseEntity.status(404).body("User not found");
+    }
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("id", user.getId());
+    response.put("username", user.getUsername());
+    response.put("email", user.getEmail());
+    response.put("role", user.getRole());
+
+    return ResponseEntity.ok(response);
+}
+
 }
