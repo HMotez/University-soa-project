@@ -6,7 +6,7 @@ L’université souhaite moderniser son système d’information en adoptant une
 L’objectif est de séparer les fonctionnalités en plusieurs services indépendants (REST et SOAP) afin de faciliter :
 - l’évolutivité,
 - la maintenabilité,
-- l’interopérabilité entre différentes technologies. :contentReference[oaicite:1]{index=1}
+- l’interopérabilité entre différentes technologies. 
 
 Ce mini-projet est réalisé dans le cadre du module **Architecture SOA et Services Web**, encadré par Mme **Ghada Feki**.
 
@@ -81,19 +81,5 @@ Le système couvre les domaines suivants :
 - **Enseignant** : saisit les notes.
 - **Étudiant** : consulte ses informations (notes, cours, factures).
 
-## 6. Contraintes
 
-- Respecter la structure de projet définie : `documentation/`, `services/`, `docker/`, `presentations/`. :contentReference[oaicite:2]{index=2}
-- Respecter les technologies imposées (au minimum un service SOAP et plusieurs REST).
-- Travail individuel ou en équipe (1 à 3 étudiants).
-- Respect des délais : évaluation pendant la semaine du 15/12/2024 (séances de TP).
 
-## 7. Livrables
-
-1. Code source de chaque service.
-2. Fichiers Docker et `docker-compose.yml`.
-3. Documentation :
-   - Cahier des charges (ce document).
-   - Spécifications techniques détaillées.
-   - Manuel d’utilisation.
-4. Présentation (PowerPoint) et éventuellement une vidéo de démonstration.
