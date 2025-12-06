@@ -1,4 +1,4 @@
-package com.univ.soa.billing.dto;
+package com.univ.soa.billing_service.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

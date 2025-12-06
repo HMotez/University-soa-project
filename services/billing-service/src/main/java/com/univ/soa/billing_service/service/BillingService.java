@@ -1,6 +1,6 @@
 package com.univ.soa.billing_service.service;
 
-import com.univ.soa.billing.dto.CreateInvoiceRequest;
+import com.univ.soa.billing_service.dto.CreateInvoiceRequest;
 import com.univ.soa.billing_service.dto.InvoiceResponse;
 import com.univ.soa.billing_service.entity.Invoice;
 import com.univ.soa.billing_service.entity.InvoiceItem;

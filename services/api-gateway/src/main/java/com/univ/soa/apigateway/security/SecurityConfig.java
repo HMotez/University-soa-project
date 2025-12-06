@@ -10,13 +10,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        // Disable CSRF as it's not typically required for stateless API Gateways
-        // Permit all exchanges because the custom GlobalFilter (JwtAuthenticationFilter)
-        // will handle the actual blocking/allowing based on the JWT token presence/validity.
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+        // Laisser la logique d'autorisation au filtre global JwtAuthenticationFilter
+        // Nous configurons Spring Security pour qu'il autorise tout ce qui est public via le filtre
+        // et bloque implicitement le reste (sauf si le filtre le valide)
+
+        return http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .anyExchange().permitAll()
-                );
-        return http.build();
+                        // Autoriser les chemins publics DIRECTEMENT ici pour éviter les conflits
+                        .pathMatchers("/auth/signin", "/auth/register").permitAll()
+
+                        // Tous les autres chemins DOIVENT être authentifiés.
+                        // Le filtre JwtAuthenticationFilter s'exécutera avant cette vérification
+                        // pour définir le principal authentifié.
+                        .anyExchange().authenticated()
+                )
+                .build();
     }
 }
