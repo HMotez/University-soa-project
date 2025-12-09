@@ -4,7 +4,11 @@ const cors = require('cors');
 const app = express();
 
 // Middleware pour JSON
-app.use(cors());
+/*app.use(cors({
+    origin: 'http://localhost:5173', // Allow the frontend port
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // Important for sending cookies/auth headers
+}));*/
 app.use(express.json());
 
 // --- Données en mémoire pour commencer (pas de base de données) ---
