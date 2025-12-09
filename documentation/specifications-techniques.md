@@ -185,5 +185,29 @@ Un fichier global `docker/docker-compose.yml` permettra de :
 
 Commande :
 
+Auth :
+cd services/auth-service
+mvn spring-boot:run
+
+Course :
+cd services/course-service
+mvn spring-boot:run
+
+Billing :
+cd services/billing-service
+mvn spring-boot:run
+
+Student :
+cd services/student-service
+npm start
+
+Grade :
+cd services/grade-service
+npm start
+
+Api :
+cd services/api-gateway
+mvn spring-boot:run
+
 ```bash
 docker-compose up --build

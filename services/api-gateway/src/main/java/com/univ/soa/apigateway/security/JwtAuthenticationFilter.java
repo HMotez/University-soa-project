@@ -9,62 +9,53 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Component
 public class JwtAuthenticationFilter implements GlobalFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    // Liste des chemins qui NE DOIVENT PAS être protégés.
-    // Correspondance exacte des chemins.
-    private static final List<String> OPEN_API_ENDPOINTS = List.of(
-            "/auth/signin",
-            "/auth/register"
-            // Note: /auth/me is protected - requires authentication
-    );
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        // 1. VÉRIFICATION DES ROUTES PUBLIQUES
-        if (OPEN_API_ENDPOINTS.contains(path)) {
-            System.out.println("GATEWAY: Public route accessed: " + path + ". Bypassing JWT filter.");
+        // ===== ALLOW ALL /auth/** ROUTES WITHOUT TOKEN =====
+        // (register, login, signin, etc.)
+        if (path.startsWith("/auth/")) {
+            System.out.println("PUBLIC ROUTE: " + path);
             return chain.filter(exchange);
         }
 
-        // --- Début de la Zone Protégée ---
+        // ===== PROTECTED ROUTES BELOW =====
 
-        // 2. Vérification de la Présence de l'En-tête Authorization
+        // 1. Must contain Authorization header
         if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-            return unauthorized(exchange, "Missing Authorization header for protected route: " + path);
+            return unauthorized(exchange, "Missing Authorization header for route: " + path);
         }
 
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
-        // 3. Vérification du format "Bearer <token>"
-        if (authHeader == null || !authHeader.startsWith("Bearer ") || authHeader.length() < 8) {
-            return unauthorized(exchange, "Invalid Authorization header format. Must be 'Bearer <token>'");
+        // 2. Must be in the form "Bearer <token>"
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return unauthorized(exchange, "Invalid Authorization header format.");
         }
 
-        // Extraction du token (substring à partir de l'index 7)
+        // 3. Extract token
         String token = authHeader.substring(7);
 
-        // 4. Validation du Token
+        // 4. Validate token
         if (!jwtUtil.isTokenValid(token)) {
             return unauthorized(exchange, "Invalid or expired token");
         }
 
-        // 5. Token valide → Procéder
+        // 5. Token valid -> Continue
         System.out.println("GATEWAY: Valid token for route: " + path);
         return chain.filter(exchange);
     }
 
     private Mono<Void> unauthorized(ServerWebExchange exchange, String message) {
-        System.err.println("UNAUTHORIZED ACCESS: " + message);
+        System.err.println("UNAUTHORIZED: " + message);
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         return exchange.getResponse().setComplete();
     }

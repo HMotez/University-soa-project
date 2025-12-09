@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 
 // Middleware pour JSON
-app.use(cors());
+
 app.use(express.json());
 
 // --- Données en mémoire pour commencer (pas de base de données) ---
