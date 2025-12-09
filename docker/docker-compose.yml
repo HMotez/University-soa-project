@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+
+  auth-service:
+    build:
+      context: ../services/auth-service
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+
+  student-service:
+    build:
+      context: ../services/student-service
+    container_name: student-service
+    ports:
+      - "3001:3001"
+
+  grade-service:
+    build:
+      context: ../services/grade-service
+    container_name: grade-service
+    ports:
+      - "3002:3002"
+
+  course-service:
+    build:
+      context: ../services/course-service
+    container_name: course-service
+    ports:
+      - "8082:8082"
+
+  billing-service:
+    build:
+      context: ../services/billing-service
+    container_name: billing-service
+    ports:
+      - "8083:8083"
+
+  api-gateway:
+    build:
+      context: ../services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - student-service
+      - grade-service
+      - course-service
+      - billing-service

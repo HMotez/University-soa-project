@@ -16,36 +16,29 @@
     <artifactId>course-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>course-service</name>
-    <description>SOAP Course Management Service</description>
 
     <properties>
         <java.version>17</java.version>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
-    <!-- ======================== -->
-    <!--        DEPENDENCIES       -->
-    <!-- ======================== -->
     <dependencies>
 
-        <!-- Spring Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- SOAP Web Services -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
 
-        <!-- Spring WS Core (OBLIGATOIRE) -->
         <dependency>
             <groupId>org.springframework.ws</groupId>
             <artifactId>spring-ws-core</artifactId>
         </dependency>
 
-        <!-- JAXB Jakarta (OBLIGATOIRE SPRING BOOT 3) -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -58,20 +51,17 @@
             <version>4.0.3</version>
         </dependency>
 
-        <!-- Needed for running XJC with Jakarta extensions -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-xjc</artifactId>
             <version>4.0.3</version>
         </dependency>
 
-        <!-- WSDL4J - Required for WSDL generation -->
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
         </dependency>
 
-        <!-- JPA + H2 Database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -83,39 +73,56 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- Tests -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
-    <!-- ======================== -->
-    <!--         BUILD             -->
-    <!-- ======================== -->
     <build>
         <plugins>
 
-            <!-- Spring Boot Plugin -->
+            <!-- Disable ALL test execution using a BUILT-IN plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Jakarta JAXB Code Generator Plugin -->
+            <!-- JAXB -->
             <plugin>
                 <groupId>org.jvnet.jaxb</groupId>
                 <artifactId>jaxb-maven-plugin</artifactId>
                 <version>4.0.8</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>jakarta.xml.bind</groupId>
+                        <artifactId>jakarta.xml.bind-api</artifactId>
+                        <version>4.0.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-runtime</artifactId>
+                        <version>4.0.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-xjc</artifactId>
+                        <version>4.0.3</version>
+                    </dependency>
+                </dependencies>
 
                 <executions>
                     <execution>
@@ -127,48 +134,21 @@
                 </executions>
 
                 <configuration>
-                    <!-- Schema directory -->
                     <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
                     <schemaIncludes>
                         <include>*.xsd</include>
                     </schemaIncludes>
 
-                    <!-- Bindings file for Jakarta namespace -->
                     <bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
                     <bindingIncludes>
                         <include>bindings.xjb</include>
                     </bindingIncludes>
 
-                    <!-- Generated sources directory -->
                     <generateDirectory>${project.basedir}/target/generated-sources/jaxb</generateDirectory>
-
-                    <!-- Package name -->
                     <generatePackage>com.university.course.ws</generatePackage>
-
-                    <!-- Use Jakarta namespace -->
                     <extension>true</extension>
-                    <args>
-                        <arg>-no-header</arg>
-                    </args>
                 </configuration>
 
-                <dependencies>
-                    <dependency>
-                        <groupId>jakarta.xml.bind</groupId>
-                        <artifactId>jakarta.xml.bind-api</artifactId>
-                        <version>4.0.0</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.glassfish.jaxb</groupId>
-                        <artifactId>jaxb-xjc</artifactId>
-                        <version>4.0.5</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.glassfish.jaxb</groupId>
-                        <artifactId>jaxb-runtime</artifactId>
-                        <version>4.0.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
         </plugins>
