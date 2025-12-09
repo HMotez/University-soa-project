@@ -3,11 +3,10 @@ const cors = require('cors');
 
 const app = express();
 
-// Middleware pour JSON
 
 app.use(express.json());
 
-// --- Données en mémoire pour commencer (pas de base de données) ---
+
 let students = []; // tableau d'étudiants en mémoire
 let nextId = 1;
 
