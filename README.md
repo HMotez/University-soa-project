@@ -158,8 +158,6 @@ All services of the **University SOA System** were validated using **Postman** t
 
 ---
 
-All test screenshots are organized by service inside the `Tests/` directory to ensure clarity, traceability, and professional documentation of the system validation process.
-
 
 
 
